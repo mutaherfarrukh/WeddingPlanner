@@ -1,0 +1,21 @@
+@using WeddingPlanner.Models
+@model Wedding
+
+<div >
+    <div class="container">
+        <a href="/AllWeddings" class="btn btn-lg btn-info m-3">Home</a>
+        <a href="/Logout" class="btn btn-lg btn-secondary m-3">Logout</a>
+    </div>
+    <h1>@ViewBag.viewWedding.Wedder1 & @ViewBag.viewWedding.Wedder2</h1>
+    <h3>Date: @ViewBag.viewWedding.WeddingDate</h3>
+    <hr noshade>
+    <div>
+        <h3>Guests:</h3>
+        @foreach (var guest in ViewBag.viewWedding.Guests)
+        {
+            <h4>@guest.User.FirstName @guest.User.LastName</h4>
+        }
+    </div>
+@* <a href="/delete/@ViewBag.viewWedding.WeddingID" type="button" class="btn btn-danger">Delete</a>
+<a href="/EditWedding/@ViewBag.viewWedding.WeddingID" type="button" class="btn btn-light">Edit</a> *@
+</div>

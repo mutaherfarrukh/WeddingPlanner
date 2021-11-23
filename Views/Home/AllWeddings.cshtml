@@ -1,0 +1,63 @@
+﻿@using WeddingPlanner.Models
+@model Wedding
+
+<div class="container">
+    <h1>Welcome to the Wedding Planner!</h1>
+    <div class="container d-flex justify-around">
+        <a href="/NewWedding" class="btn btn-lg btn-info m-3">Add A Wedding</a>
+        <a href="/Logout" class="btn btn-lg btn-danger m-3">Logout</a>
+    </div>
+</div>
+<hr noshade>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Wedding</th>
+                <th>Date</th>
+                <th>Guest #</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        @* For every row of the table, and using every wedding's data that appears in those rows *@
+        @foreach (Wedding wed in ViewBag.AllWeddings)
+        {
+            <tr>
+            <!-- these have to line up with the names in the SQL database -->
+                <td><a href="/SingleWedding/@wed.WeddingID">@wed.Wedder1 & @wed.Wedder2</a></td> 
+                <td>@wed.WeddingDate</td> 
+                <td>@wed.Guests.Count</td>
+
+                @* If the wedding planner's ID matches the current logged in user, display DELETE *@
+                @if (@wed.Planner.UserId == ViewBag.CurrentUser.UserId)
+                {
+                    <td><a href="/delete/@wed.WeddingID" class="btn btn-lg btn-danger">Delete</a></td> 
+                }
+                @* If they dont match, check for RSVP *@
+                else if (@wed.Planner.UserId != ViewBag.CurrentUser.UserId)
+                {
+                    var rsvp = false;
+                    foreach (var user in wed.Guests)
+                    {
+                        @* For each guest in the wedding, check if the RSVP UserID matches the current logged-in UserId *@
+                        if (user.UserID== ViewBag.CurrentUser.UserId)
+                        {
+                            rsvp = true;
+                        }
+                    }
+                    if (rsvp)
+                    {
+                    <td><a href="/unRSVP/@wed.WeddingID" class="btn btn-warning">un-RSVP</a></td>
+                    }
+                    else
+                    {
+                    <td><a href="/RSVP/@wed.WeddingID" class="btn btn-success">RSVP</a></td>
+                    }
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
